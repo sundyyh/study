@@ -1,0 +1,1 @@
+[具有分页功能的 Recyclerview 布局管理器](https://github.com/GcsSloop/pager-layoutmanager)
