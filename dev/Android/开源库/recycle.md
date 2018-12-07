@@ -19,6 +19,14 @@
 
 ![](https://github.com/emilsjolander/StickyListHeaders/raw/master/demo.gif)
 
+粘性头部
 
 https://blog.csdn.net/briblue/article/details/70211942
 
+https://www.jianshu.com/p/c0b131b679c0
+
+https://www.jianshu.com/p/e200c8198173
+
+https://blog.csdn.net/zgcqflqinhao/article/details/83013923
+
+https://blog.csdn.net/lly347705530/article/details/78951400
