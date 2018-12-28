@@ -7,7 +7,7 @@
 - Android证书的安装
 
 ## Flutter SDK的安装
- 下载地址 https://c.io/docs/development/tools/sdk/archive
+ 下载地址 https://flutter.io/docs/development/tools/sdk/archive
  
  配置环境变量（***\flutter\bin加入path）
  
