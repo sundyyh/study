@@ -15,3 +15,11 @@
 
 [SuperTextView](https://github.com/lygttpod/SuperTextView)
 ![](https://camo.githubusercontent.com/858932c75508773ecdb50a884804841962a0ddc7/687474703a2f2f6f736e6f65783676662e626b742e636c6f7564646e2e636f6d2f737570657274657874766965772e6a7067)
+
+
+
+[骨架屏（Skeleton Screen）在Android中的应用](https://juejin.im/post/5c789a4ce51d457c042d3b31)
+
+[ShimmerRecyclerView](https://github.com/sharish/)
+
+![](https://github.com/sharish/ShimmerRecyclerView/raw/master/screenshots/list_demo.gif)
