@@ -35,7 +35,7 @@ vi ifcfg-enp0s3
 
 ip addr 查看是否分配到IP地址
 
-​	![](./imgs/ipaddr.png)
+​	![](../imgs/ipaddr.png)
 
 
 
@@ -51,7 +51,7 @@ yum upgrade
 yum provides ifconfig
 ```
 
-​	![](./imgs/provides-ifconfig.png)
+​	![](../imgs/provides-ifconfig.png)
 
 “provides”或者“whatprovides”，用于找出某个包提供了某些功能或文件
 
@@ -63,7 +63,7 @@ yum install net-tools
 
 输入ifconfig 发现ip为10.0.2.15 在Windows系统的cmd窗口ping一下，发现无法连接：
 
-​	![](./imgs/ifconfig.png)
+​	![](../imgs/ifconfig.png)
 
 出现这种情况，是因为VirtualBox的默认网络连接方式为：网络地址转换（NAT）---->将它更改桥接网卡
 
