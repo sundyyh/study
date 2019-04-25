@@ -177,3 +177,5 @@ ps [options] [--help]
 ​	 |符号，是个管道符号，表示ps 和 grep 命令同时执行；
 
 ​	grep 命令是查找（Global Regular Expression Print），能使用正则表达	式搜索文本，然后把匹配的行显示出来；
+### 7.pwd命令用于显示工作目录
+
