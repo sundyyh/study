@@ -47,7 +47,7 @@
 ​	8).Configuring the line ending conversions
 
 ![](https://github.com/sundyyh/study/blob/master/imgs/git_install_configuring_the_line_ending_conversions.png.jpg)
-		配置行结束符，选择第一项，意思是“取出文件时使用windows风格，提交文件时使用unix风格
+		配置行结束符，选择第一项，意思是"取出文件时使用windows风格，提交文件时使用unix风格"
 
 ​		选择提交的时候换行格式
 
@@ -60,3 +60,149 @@
 ​	9）Configuring the terminal emulator to use with Git Bash选择终端模拟器，选择第一个选项，然后点击Next，这样配置后git bash的终端比较易用。(默认 Use-MinTTY)
 
 ​	10）.Configuring extra options (使用默认)
+
+## 工作区（Working Directory）
+
+就是你在电脑里能看到的目录
+
+## 暂存区（缓存区）
+
+英文叫stage, 或index。一般存放在".git目录下" 下的index文件（**.git/index**）中，所以我们把暂存区有时也叫作索引（index）
+
+## 版本库
+
+工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。**git中的.git/refs/heads/master是分支，是版本**
+![版本库图片](https://github.com/sundyyh/study/blob/master/imgs/git_branch_info.jpg)
+
+下面这个图展示了工作区、版本库中的暂存区和版本库之间的关系：
+![工作区、版本库中的暂存区和版本库之间的关系](https://github.com/sundyyh/study/blob/master/imgs/git_install_configuring_the_line_ending_conversions.png)
+
+图中左侧为工作区，右侧为版本库。在版本库中标记为"index" 的区域是暂存区（stage,index），标记为 "master"的是 master 分支所代表的目录树。
+
+在工作区新建文件   ----->git add提交到暂存区------>git commint 到本地库
+
+
+
+## git命令行操作
+
+	##### 本地库操作
+
+##### 	1.本地初始化
+
+​		**git init**
+
+​		使用 Git Bash Here打开git命令行工具进入要git管理的目录使用git init，成功后会在改目录下创建.git目录（在linux中以.开头的文件和目录是隐藏的资源，使用ls -lA 命令查看，）
+
+​	.git 目录中存放的是本地库相关的子目录和文件，不要删除和随便修改
+
+##### 	2.设置签名
+
+​		形式：
+
+​			用户名：tom
+
+​			Email地址：sundy@qq.com
+
+​		作用：区分不同开发人员的身份
+
+​		辨析：这里设置的签名和登录远程库（代码托管中心）的账号、密码没有任何关系
+
+​		命令：
+
+​			项目级别/仓库级别： 仅在当前本地库范围内有效
+
+​				git **config** user.name tom_pro
+
+​				git **config** user.email sun@qq.com
+
+​			系统用户级别：登录当前操作系统的用户范围
+
+​				git **config** **--global** user.name tom_glb
+
+​				git **config** **--global** user.email sun@qq.com
+
+​			项目级别查看设置好后的签名：cat  .git/config
+
+```shell
+$ cat config
+[core]
+        repositoryformatversion = 0
+        filemode = false
+        bare = false
+        logallrefupdates = true
+        symlinks = false
+        ignorecase = true
+[user]
+        name = tom_pro
+        email = sun@qq.com
+
+```
+
+
+
+```shell
+cd ~：回到用户家目录
+ls -lA|less :查看隐藏参数 保存在~/.gitconfig文件
+cat .gitconfig
+[user]
+        name = tom_glb
+        email = sun_glb@qq.com
+```
+
+
+
+​			优先级：就近原则（项目级别优先于系统用户级别，二者都有采用项目级别的签名），如果只有系统用户级别的签名，就以系统用户级别的签名为准，二者都没有不允许
+
+##### 	2.基本操作
+
+​		**git status**
+
+```shell
+$ git status
+On branch master
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+$ vim good.txt	#创建文件
+
+Administrator@DESKTOP-GJAFBAK MINGW64 ~/Desktop/git (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+         <font color=#f00>good.txt</font>
+
+nothing added to commit but untracked files present (use "git add" to track) #未追踪的文件存在（使用git add命令去追踪它【即包含到暂存区】）
+
+Administrator@DESKTOP-GJAFBAK MINGW64 ~/Desktop/git (master)
+$ git add good.txt
+warning: LF will be replaced by CRLF in good.txt. #CRLF是Carriage-Return Line-Feed的缩写，意思是回车换行，就是回车(CR, ASCII 13, \r) 换行(LF, ASCII 10, \n)
+The file will have its original line endings in your working directory.
+
+Administrator@DESKTOP-GJAFBAK MINGW64 ~/Desktop/git (master)
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        <font color=#0f0>new file:   good.txt</font>
+
+
+Administrator@DESKTOP-GJAFBAK MINGW64 ~/Desktop/git (master)
+
+```
+
+
+
+##### 	3.分支管理
+
+##### 远程库操作
+
