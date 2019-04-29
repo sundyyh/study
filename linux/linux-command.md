@@ -179,3 +179,16 @@ ps [options] [--help]
 ​	grep 命令是查找（Global Regular Expression Print），能使用正则表达	式搜索文本，然后把匹配的行显示出来；
 ### 7.pwd命令用于显示工作目录
 
+### 8.cat filename 观看某个文件的内容
+
+### shell下命令输入错误的快速修改
+    Ctrl-u    向左删除光标前所有字符
+    
+    Ctrl-k    向右删除光标后所有字符
+    
+    CTRL-w    向左删除光标前一个word
+    
+    CTRL-h    向左删除光标一个字符
+    
+    Ctrl-l    清除屏幕，只保持一行
+
