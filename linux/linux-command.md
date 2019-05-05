@@ -192,3 +192,4 @@ ps [options] [--help]
     
     Ctrl-l    清除屏幕，只保持一行
 
+##### 9.cd命令（change directory切换目录）
