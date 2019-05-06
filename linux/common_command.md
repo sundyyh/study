@@ -444,13 +444,13 @@ $ !5 #执行历史编号为5的指令
 	案例3: 显示当前时间年月日时分秒 
 
 ```shell
-[root@localhost home]# date +%Y
+[root@localhost home]$ date +%Y
 2019
-[root@localhost home]# date +%m
+[root@localhost home]$ date +%m
 05
-[root@localhost home]# date +%d
+[root@localhost home]$ date +%d
 06
-[root@localhost home]# date "+%Y-%m-%d %H:%M:%S"    #+号不能少
+[root@localhost home]$ date "+%Y-%m-%d %H:%M:%S"    #+号不能少
 2019-05-06 16:20:49
 ```
 
@@ -461,7 +461,7 @@ date指令-设置日期
 		案例1: 设置系统当前时间 ， 比如设置成 2019-05-06 15:35:40
 
 ```shell
-[root@localhost home]# date -s "2019-05-06 15:35:40"
+[root@localhost home]$ date -s "2019-05-06 15:35:40"
 Mon May  6 15:35:40 EDT 2019
 ```
 
@@ -475,7 +475,7 @@ Mon May  6 15:35:40 EDT 2019
 ​		案例2: 显示2020年日历 
 
 ```shell
-[root@localhost home]# cal
+[root@localhost home]$ cal 
       May 2019      
 Su Mo Tu We Th Fr Sa
           1  2  3  4
@@ -483,6 +483,367 @@ Su Mo Tu We Th Fr Sa
 12 13 14 15 16 17 18
 19 20 21 22 23 24 25
 26 27 28 29 30 31
+[root@localhost home]# cal 2020
+                               2020                               
 
+       January               February                 March       
+Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa
+          1  2  3  4                      1    1  2  3  4  5  6  7
+ 5  6  7  8  9 10 11    2  3  4  5  6  7  8    8  9 10 11 12 13 14
+12 13 14 15 16 17 18    9 10 11 12 13 14 15   15 16 17 18 19 20 21
+19 20 21 22 23 24 25   16 17 18 19 20 21 22   22 23 24 25 26 27 28
+26 27 28 29 30 31      23 24 25 26 27 28 29   29 30 31
+
+        April                   May                   June        
+Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa
+          1  2  3  4                   1  2       1  2  3  4  5  6
+ 5  6  7  8  9 10 11    3  4  5  6  7  8  9    7  8  9 10 11 12 13
+12 13 14 15 16 17 18   10 11 12 13 14 15 16   14 15 16 17 18 19 20
+19 20 21 22 23 24 25   17 18 19 20 21 22 23   21 22 23 24 25 26 27
+26 27 28 29 30         24 25 26 27 28 29 30   28 29 30
+                       31
+        July                  August                September     
+Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa
+          1  2  3  4                      1          1  2  3  4  5
+ 5  6  7  8  9 10 11    2  3  4  5  6  7  8    6  7  8  9 10 11 12
+12 13 14 15 16 17 18    9 10 11 12 13 14 15   13 14 15 16 17 18 19
+19 20 21 22 23 24 25   16 17 18 19 20 21 22   20 21 22 23 24 25 26
+26 27 28 29 30 31      23 24 25 26 27 28 29   27 28 29 30
+                       30 31
+       October               November               December      
+Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa   Su Mo Tu We Th Fr Sa
+             1  2  3    1  2  3  4  5  6  7          1  2  3  4  5
+ 4  5  6  7  8  9 10    8  9 10 11 12 13 14    6  7  8  9 10 11 12
+11 12 13 14 15 16 17   15 16 17 18 19 20 21   13 14 15 16 17 18 19
+18 19 20 21 22 23 24   22 23 24 25 26 27 28   20 21 22 23 24 25 26
+25 26 27 28 29 30 31   29 30                  27 28 29 30 31
+
+
+```
+
+##  搜索查找类
+
+##### find指令
+
+​	find指令将从指定目录向下递归地遍历其各个子目录，将满足条件的**文件或者目录**显示在终
+端。
+​	• 基本语法
+​		find [搜索范围，即搜索目录] [选项]
+​	• 选项说明
+
+| 选项            | 功能                             |
+| --------------- | -------------------------------- |
+| -name<查询方式> | 按照指定的文件名查找模式查找文件 |
+| -user<用户名>   | 查找属于指定用户名所有文件       |
+| -size<文件大小> | 按照指定的文件大小查找文件       |
+
+​	• 应用实例
+​		案例1: 按文件名：根据名称查找/home 目录下的hello.txt文件
+​		案例2： 按拥有者：查找/opt目录下，用户名称为 nobody的文件
+​		案例3： 查找整个linux系统下大于200m的文件（+n 大于 -n小于 n等于）		案例4： 查询/目录下，所有.txt的文件
+
+```shell
+$ find /home -name hello.txt 
+/home/hello.txt
+$ find /opt -user nobody
+$ find / -size +200M
+$ find / -size -200M
+$ find / -size 200M
+$ find / -name *.txt
+```
+
+##### locate指令
+
+​	locaate指令可以快速定位文件路径。 locate指令利用事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件。 Locate指令无需遍历整个文件系统，查询速度较快。
+​	为了保证查询结果的准确度，管理员必须定期更新locate时刻。
+• 基本语法
+​	locate 搜索文件
+• 特别说明
+​	由于locate指令基于数据库进行查询，**所以第一次运行前，必须使用updatedb指令创建locate数据库**。
+• 应用实例
+​	案例1: 请使用locate 指令快速定位 hello.txt 文件所在目录 
+
+• 注意
+
+​	updatedb提示command not found  使用**yum install mlocate**安装
+
+
+
+```shell
+$ [root@localhost home]$ updatedb
+bash: updatedb: command not found
+[root@localhost home]$ yum install mlocate
+[root@localhost home]# updatedb
+[root@localhost home]# locate hello.txt
+/home/hello.txt
+
+```
+
+#### grep指令和 管道符号 |
+
+​	grep 过滤查找 ， 管道符， “|”，表示将前一个命令的处理结果输出传递给后面的命令处理。
+• 基本语法
+​	grep [选项] 查找内容 源文件
+• 常用选项 	
+
+| 选项 | 功能             |
+| ---- | ---------------- |
+| -n   | 显示匹配行及行号 |
+| -i   | 忽略字母大小写   |
+
+• 应用实例
+案例1: 请在 hello.txt 文件中，查找 "yes" 所在行，并且显示行号 
+
+```shell
+$ cat hello.txt | grep yes
+yes
+yes
+$ cat hello.txt | grep -n yes
+4:yes
+7:yes
+```
+
+## 压缩和解压类 
+
+##### gzip/gunzip 指令(很少用)
+
+​	gzip 用于压缩文件， gunzip 用于解压的
+​	• 基本语法
+​		gzip 文件 （功能描述：压缩文件，只能将文件压缩为*.gz文件）
+​		gunzip 文件.gz （功能描述：解压缩文件命令）
+​	• 应用实例
+​		案例1: gzip压缩， 将 /home下的 hello.txt文件进行压缩
+​		案例2: gunzip压缩， 将 /home下的 hello.txt.gz 文件进行解压缩 
+
+```shell
+$ gzip hello.txt #压缩完生成hello.txt.gz文件后会删除原来文件	
+$ gunzip hello.txt.gz	#
+```
+
+##### zip/unzip 指令
+
+​	zip 用于压缩文件， unzip 用于解压的，这个在项目打包发布中很有用的
+• 基本语法
+​	zip [选项] XXX.zip 将要压缩的内容（功能描述：压缩文件和目录的命令）
+​	unzip [选项] XXX.zip （功能描述：解压缩文件）
+• zip常用选项
+​	**-r**：递归压缩，即压缩目录
+​	• unzip的常用选项
+​	**-d**<目录> ： 指定解压后文件的存放目录
+• 应用实例
+​	案例1: 将 /home下的 所有文件进行压缩成 mypackage.zip
+​	案例2: 将 mypackge.zip 解压到 /opt/tmp 目录下 
+
+```shell
+$ zip -r mypackage.zip /home/
+$ unzip -d /opt/tmp/ mypackage.zip
+```
+
+##### tar 指令
+
+​	tar 指令 是打包指令，最后打包后的文件是 .tar.gz 的文件。
+​	• 基本语法
+​		tar [选项] XXX.tar.gz 打包的内容 (功能描述：打包目录，压缩后的文件格式.tar.gz)
+​	• 选项说明 
+
+| 选项 | 功能               |
+| ---- | ------------------ |
+| -c   | 产生.tar打包文件   |
+| -v   | 显示详细信息       |
+| -f   | 指定压缩后的文件名 |
+| -z   | 打包同时压缩       |
+| -x   | 解包.tar文件       |
+
+• 应用实例
+	案例1: 压缩多个文件，将 /home/a1.txt 和 /home/a2.txt 压缩成 a.tar.gz
+	案例2: 将/home 的文件夹 压缩成 myhome.tar.gz
+	案例3: 将 a 解压到当前目录
+	案例4: 将myhome.tar.gz  解压到/opt/tmp2目录下
+	
+
+ 
+
+```shell
+$ tar -zcvf a.tar.gz a1.txt a2.txt  # 打包后文件名为a.tar.gz
+$ tar -zcvf myhome.tar.gz /home/
+$ tar -zxvf a.tar.gz
+$ tar -zxvf a.tar.gz -C /opt/tmp2/ #解压目录要存在，否则报错
+```
+
+## 组管理和权限管理 
+
+#### 	Linux组基本介绍
+
+​		在linux中的每个用户必须属于一个组，不能独立于组外。在linux中每个文件有所有者、所在组、其它组的概念。
+​		1) 所有者
+​		2) 所在组
+​		3) 其它组
+​		4) 改变用户所在的组 
+
+​		 文件/目录 所有者：一般为文件的创建者,谁创建了该文件， 就自然的成为该文件的所有者 
+
+#### 	查看文件的所有者 
+
+​		1) 指令： ls -ahl
+​		2) 应用实例：创建一个组police，再 创建一个用户tom，将tom放在police组，然后使用tom来创建一个文件ok.txt,看看情况如何
+​		
+
+```shell
+$ groupadd police
+$ useradd -g police tom
+[tom@localhost ~]$ touch ok.txt
+[tom@localhost ~]$ ls -ahl
+-rw-rw-r--. 1 tom police    0 May  6 16:45 ok.txt
+# tom为所有者 police为文件所在组（一般为用户所在组，可以改）
+```
+
+#### 	修改文件所有者
+
+​		• 指令： chown 用户名 文件名
+​		• 指令： chown newower:newgroup file 改变文件的所有者和所有组
+​		• **-R** 如果是目录 则使其下所有子文件或目录递归生效
+​		• 应用案例
+​			1)使用root 创建一个文件apple.txt ，然后将其所有者修改成 zhangfei 	
+​			2)请将 /home/abc .txt 文件的所有者修改成 tom
+​			3)请将 /home/kkk 目录下所有的文件和目录的所有者都修改成tom 	
+
+```shell
+$ chown tom apple.txt
+$ chown tom abc.txt
+$ chown -R tom kkk/
+```
+
+#### 	组的创建
+
+​		基本指令:groupadd 组名 
+
+​		应用实例:
+​			创建一个组, ,monster
+​			创建一个用户 fox ，并放入到 monster组中 		
+
+```shell
+$ groupadd monster
+$ useradd -g monster fox
+$ id fox
+```
+
+#### 	文件/目录 所在组
+
+​		当某个用户创建了一个文件后，这个文件的所在组就是该用户所在的组。
+​	查看文件/目录所在组
+​	• 基本指令
+​		ls –ahl
+
+#### 	修改文件所在的组
+
+​	• 基本指令
+​		chgrp 组名 文件名
+​	• 应用实例
+​		1).使用root用户创建文件 orange.txt ,看看当前这个文件属于哪个组，然后将这个文件所在组，修改到 fruit组。 
+
+​		2).请将 /home/kkk 目录下所有的文件和目录的所在组都修改成bandit(土匪) 
+
+```shell
+$ touch orange.txt
+$ ls -l
+-rw-r--r--. 1 root root      0 May  6 16:45 orange.txt
+$ chgrp police orange.txt
+$ ls -l
+-rw-r--r--. 1 root police    0 May  6 16:45 orange.txt
+$ chgrp -R bandit  kkk/
+```
+
+#### 	其它组
+
+​		除文件的所有者和所在组的用户外，系统的其它用户都是文件的其它组。
+
+#### 	 改变用户所在组
+
+​	在添加用户时，可以指定将该用户添加到哪个组中，同样的用root的管理权限可以改变某个用户所在的组。
+
+​	用法：
+
+​	1) usermod –g 组名 用户名
+​	2) usermod –d 目录名 用户名 改变该用户登陆的初始目录。
+​	应用实例
+​		将 zwj 这个用户从原来所在组，修改到 wudang 组。 
+
+```shell
+$ usermod -g wudang zwj
+```
+
+#### 权限的基本介绍
+
+ls -l 中显示的内容如下：
+-rwxrw-r-- 1 root root 1213 Feb 2 09:39 abc
+0-9位说明
+1) 第0位确定文件类型(**d**【目录】, **-**【普通文件】 , l 【链接文件，软链接】, c【字符设备，如键盘、鼠标】 , b【块文件，如硬盘】)
+2) 第1-3位确定所有者（该文件的所有者）拥有该文件的权限。 ---User
+3) 第4-6位确定所属组（同用户组的）拥有该文件的权限， ---Group
+4) 第7-9位确定其他组的用户拥有该文件的权限 ---Other 
+
+##### rwx权限详解
+
+**rwx作用到文件**
+	1) [ r ]代表可读(read): 可以读取,查看
+	2) [ w ]代表可写(write): 可以修改,但是不代表可以删除该文件,删除一个文件的前提条件是对该文件所在的目录有写权限，才能删除该文件.
+	3) [ x ]代表可执行(execute):可以被执行
+**rwx作用到目录**
+	1) [ r ]代表可读(read): 可以读取， ls查看目录内容
+	2) [ w ]代表可写(write): 可以修改,目录内创建+删除+重命名目录
+	3) [ x ]代表可执行(execute):可以进入该目录 
+
+```shell
+-rw-r--r--. 1 root police  0  May  6 16:45 orange.txt
+|           | 	|	 |     |
+|           |   | 	 |     |文件大小，如果是目录4096
+|           |	|	 |文件或目录所在组   
+|           |   |
+|           |   |文件或目录所有者
+|           |					
+|           如果是文件表示硬链接的数，如果是目录则表示改目录的子目录的个数
+|文件类型
+```
+
+**ls -l 中显示的内容如下：**
+	-rwxrw-r-- 1 root root 1213 Feb 2 09:39 abc
+	10个字符确定不同用户能对文件干什么
+	第一个字符代表文件类型： 文件 (-),目录(d),链接(l)
+	其余字符每3个一组(rwx) 读(r) 写(w) 执行(x)
+	第一组rwx : 文件拥有者的权限是读、写和执行
+	第二组rw- : 与文件拥有者同一组的用户的权限是读、写但不能执行
+	第三组r-- : 不与文件拥有者同组的其他用户的权限是读不能写和执行
+	**可用数字表示为: r=4,w=2,x=1 因此rwx=4+2+1=7**
+	1 文件：硬连接数或 目录：子目录数
+	root 用户
+	root 组
+	1213 文件大小(字节)， 如果是文件夹，显示 4096字节
+	Feb 2 09:39 最后修改日期
+	abc 文件名 
+
+#### 修改权限-chmod
+
+基本说明：通过chmod指令，可以修改文件或者目录的权限。
+第一种方式： **+ 、 -、 = 变更权限**
+**u:所有者 g:所有组 o:其他人 a:所有人(u、 g、 o的总和)**
+	1) chmod u=rwx,g=rx,o=x 文件目录名	
+	2) chmod o+w 文件目录名 (给其它组添加写权限)
+	3) chmod a-x 文件目录名 （给所有组减执行权限）
+• 案例演示
+	1) 给abc文件 的所有者读写执行的权限，给所在组读执行权限，给其它组读执行权限。
+	2) 给abc文件的所有者除去执行的权限，增加组写的权限
+	3) 给abc文件的所有用户添加读的权限 	
+	4) 将 /home/abc.txt 文件的权限修改成 rwxr-xr-x, 使用给数字的方式实现 
+
+第二种方式：**通过数字变更权限**
+r=4, w=2, x=1 rwx=4+2+1=7
+chmod u=rwx,g=rx,o=x 文件目录名
+相当于 chmod 751 文件目录名 
+
+```shell
+$ chmod u=rxw,g=rx,o=rx abc
+$ chmod a-x,g+w abc
+$ chmod a+r abc
+$ chmod 755 /home/abc.txt
 ```
 
