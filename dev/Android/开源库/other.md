@@ -23,3 +23,6 @@
 [ShimmerRecyclerView](https://github.com/sharish/)
 
 ![](https://github.com/sharish/ShimmerRecyclerView/raw/master/screenshots/list_demo.gif)
+
+广告轮播
+https://github.com/saiwu-bigkoo/Android-ConvenientBanner
