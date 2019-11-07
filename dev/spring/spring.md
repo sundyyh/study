@@ -316,12 +316,59 @@ Spring自带了多种类型的应用上下文。 下面罗列的几个是你最�
 - FileSystemXmlapplicationcontext： 从文件系统下的一个或多个XML配置文件中加载上下文定义。
 - XmlWebApplicationContext： 从Web应用下的一个或多个XML配置文件中加载上下文定义 
 
-```mermaid
-graph LR
-A[方形] -->B(圆角)
-    B --> C{条件a}
-    C -->|a=1| D[结果1]
-    C -->|a=2| E[结果2]
-    F[横向流程图]
-​```
+无论是从文件系统还是类路径装在应用上下文，将bean加载到BeanFactory的过程是类似的，区别在于一个是从文件系统路径下查找xml文件，另一个是在所有的类路径下（包含JAR文件）查找xml文件
+
+```java
+ApplicationContext context=new FileSystemXmlApplicationContext("C:/knight.xml");
+//或者
+ApplicationContext context=new ClassPathXmlApplicationContext("knight.xml");
+//java配置中加载上下文
+ApplicationContext context=new  AnnotationConfigApplicationContext(com.springinaction.knights.config.KnightConfig.class);
 ```
+
+1.2.2 bean的生命周期 
+
+图展示了bean装载到Spring应用上下文中的一个典型的生命周期过程。 
+
+![](https://github.com/sundyyh/study/blob/master/imgs/spring_bean_lifecycle.jpg)
+
+<kbd>实例化</kbd>-><kbd>扩充属性</kbd>-><kbd>调用BeanNameAware的setBeanName()方法 </kbd>-><kbd>调用BeanFactoryAware的setBeanFactory()方法 </kbd>-><kbd>调用ApplicationContextAware接口的setApplicationContext()方法 </kbd>-><kbd>调用BeanPostProcessor的预初始化方法 </kbd>-><kbd>调用InitializingBean的afterPropertiesSet()方法 </kbd>-><kbd>调用自定的初始化方法</kbd>-><kbd>调用BeanPostProcessor的初始化方法</kbd>-><kbd>此时， bean已经准备就绪， 可以被应用程序使用了， 它们将一直
+驻留在应用上下文中， 直到该应用上下文被销毁 </kbd>-><kbd>容器关闭</kbd>-><kbd>调用DisposableBean 的destroy()方法</kbd>-><kbd>调用自定的销毁方法</kbd>
+
+bean在Spring容器中从创建到销毁经历了若干阶段， 每一阶段都可以针对Spring如何管理bean进行个性化定制 
+
+**1． Spring对bean进行实例化；**
+**2． Spring将值和bean的引用注入到bean对应的属性中；**
+**3． 如果bean实现了BeanNameAware接口， Spring将bean的ID传递给setBean-Name()方法；**
+**4． 如果bean实现了BeanFactoryAware接口， Spring将调用setBeanFactory()方法， 将BeanFactory容器实例传入；**
+**5． 如果bean实现了ApplicationContextAware接口， Spring将调用setApplicationContext()方法， 将bean所在的应用上下文的引用传入进来；**
+**6． 如果bean实现了BeanPostProcessor接口， Spring将调用它们的post-ProcessBeforeInitialization()方法；**
+**7． 如果bean实现了InitializingBean接口， Spring将调用它们的after-PropertiesSet()方法。 类似地， 如果bean使用initmethod声明了初始化方法， 该方法也会被调用；**
+**8． 如果bean实现了BeanPostProcessor接口， Spring将调用它们的post-ProcessAfterInitialization()方法；**
+**9． 此时， bean已经准备就绪， 可以被应用程序使用了， 它们将一直驻留在应用上下文中， 直到该应用上下文被销毁；**
+**10． 如果bean实现了DisposableBean接口， Spring将调用它的destroy()接口方法。 同样， 如果bean使用destroy-method声明了销毁方法， 该方法也会被调用。**
+
+##### ![](https://img-blog.csdn.net/2018101716393861?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L05vX0dhbWVfTm9fTGlmZV8=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+**Spring核心容器**
+容器是Spring框架最核心的部分， 它管理着Spring应用中bean的创建、配置和管理。 在该模块中， 包括了Spring bean工厂， 它为Spring提供了DI的功能。 基于bean工厂， 我们还会发现有多种Spring应用上下文的实现， 每一种都提供了配置Spring的不同方式。
+
+**Spring的AOP模块**
+借助于AOP， 可以将遍布系统的关注点（例如事务和安全） 从它们所应用的对象中解耦出来
+**数据访问与集成**    
+
+消除样板式代码 简化模版。Spring提供了ORM模块 ，建立在对DAO的支持之上， 并为多个ORM框架提供了一种构建DAO的简便方式 
+
+Spring没有尝试去创建自己的ORM解决方案， 而是对许多流行的ORM框架进行了集成， 包括Hibernate、 Java Persisternce API、Java Data Object和iBATIS SQL Maps。 Spring的事务管理支持所有的ORM框架以及JDBC 
+
+**Web与远程调用**
+MVC模式是一种普遍被接受的构建Web应用的方法，它可以帮助用户将界面逻辑与应用逻辑分离。java从来不缺少MVC框架，Apache的Struts、 JSF、 WebWork和Tapestry都是可选的，最流行的MVC框架 SpringMVC我们将在后续学习到。
+远程调用功能集成了RMI/Hessian/Burlap/JAX-WS等等
+
+## 第2章 装配Bean 
+
+在Spring中， 对象无需自己查找或创建与其所关联的其他对象。 相反， 容器负责把需要相互协作的对象引用赋予各个对象 
+
+**创建应用对象之间协作关系的行为通常称为装配（wiring） ， 这也是依赖注入（DI） 的本质** 
+$\color{red}{red}$
+<font color="#A52A2A" size=4 >Markdwon测试</font>
