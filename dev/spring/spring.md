@@ -242,8 +242,7 @@ public class BraveKnight implements Knight {
   <aop:config>
     <aop:aspect ref="minstrel">
       <!--切入点，并配置expression属性来选择所应用的通知。 表达式的语法采用的是AspectJ的切点表达式语言-->
-      <aop:pointcut id="embark"
-          expression="execution(* *.embarkOnQuest(..))"/>
+      <aop:pointcut id="embark"    expression="execution(* *.embarkOnQuest(..))"/>
       <!--声明（使用<aop:before>） 在embarkOnQuest()方法执行前调用Minstrel的singBeforeQuest()方法。 这种方式被称为前置通知（before advice）-->
       <aop:before pointcut-ref="embark"  method="singBeforeQuest"/>
 	  <!--after advice:pointcut-ref属性都引用了名字为embank的切入点-->
@@ -370,5 +369,183 @@ MVC模式是一种普遍被接受的构建Web应用的方法，它可以帮助�
 在Spring中， 对象无需自己查找或创建与其所关联的其他对象。 相反， 容器负责把需要相互协作的对象引用赋予各个对象 
 
 **创建应用对象之间协作关系的行为通常称为装配（wiring） ， 这也是依赖注入（DI） 的本质** 
-$\color{red}{red}$
-<font color="#A52A2A" size=4 >Markdwon测试</font>
+
+### 2.1 Spring配置的可选方案 
+
+Spring容器负责创建应用程序中的bean并通过DI来协调这些对象之间的关系。但是， 作为开发人员， 你需要告诉Spring要创建哪些bean并且如何将其装配在一起。 当描述bean如何进行装配时， Spring具有非常大的灵活性， 它提供了三种主要的装配机制  
+
+1. 在XML中进行显式配置。
+2. 在Java中进行显式配置。
+3. 隐式的bean发现机制和自动装配。 
+
+Spring的配置风格是可以互相搭配的， 所以你可以选择使用XML装配一些bean， 使用Spring基于Java的配置（JavaConfig） 来装配另一些bean， 而将剩余的bean让Spring去自动发现 
+
+**建议是尽可能地使用自动配置的机制。 显式配置越少越好** 
+
+当你必须要显式配置bean的时候（比如， 有些源码不是由你来维护的， 而当你需要为这些代码配置bean的时候） ， 推荐使用类型安全并且比XML更加强大的JavaConfig。 最后， 只有当你想要使用便利的XML命名空间， 并且在JavaConfig中没有同样的实现时， 才应该使用XML 
+
+### 2.2 自动化装配bean 
+
+Spring从两个角度来实现自动化装配：
+
+- 组件扫描（component scanning） ： Spring会自动发现应用上下文中所创建的bean。
+- 自动装配（autowiring） ： Spring自动满足bean之间的依赖。 
+
+
+
+2.2.1 创建可被发现的bean 
+
+```java
+public interface MediaPlayer {
+
+  void play();
+
+}
+package soundsystem;
+@Component
+public class CDPlayer implements MediaPlayer {
+  private CompactDisc cd;
+
+  @Autowired
+  public CDPlayer(CompactDisc cd) {
+    this.cd = cd;
+  }
+
+  public void play() {
+    cd.play();
+  }
+
+}
+
+package soundsystem;
+
+public interface CompactDisc {
+  void play();
+}
+//注解表明该类会作为组件类， 并告知Spring要为这个类创建bean。 没有必要显式配置SgtPeppers bean， 因为这个类使用了@Component注解， 所以Spring会为你把事情处理妥当
+@Component
+public class SgtPeppers implements CompactDisc {
+
+  private String title = "Sgt. Pepper's Lonely Hearts Club Band";  
+  private String artist = "The Beatles";
+  
+  public void play() {
+    System.out.println("Playing " + title + " by " + artist);
+  }
+  
+}
+package soundsystem;
+//如果没有其他配置的话， @ComponentScan将扫描与配置类相同的包以及这个包下的所有子包， 查找带有@Component注解的类
+@Configuration
+@ComponentScan//，组件扫描默认是不启用的,需要显式配置一下Spring，，从而命令它去寻找带有@Component注解的类， 并为其创建bean
+public class CDPlayerConfig { 
+}
+```
+
+XML来启用组件扫描 
+
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<beans><!--省略命名空间-->
+  <context:component-scan base-package="soundsystem" />
+</beans>
+
+```
+
+为了测试组件扫描的功能， 我们创建一个简单的JUnit测试，它会创建Spring上下文， 并判断CompactDisc是不是真的创建出来了 
+
+<a name="CDPlayerTest">CDPlayerTest</a>
+
+```java
+
+@RunWith(SpringJUnit4ClassRunner.class)//使用了Spring的SpringJUnit4ClassRunner， 以便在测试开始的时候自动创建Spring的应用上下文
+@ContextConfiguration(classes=CDPlayerConfig.class)//@ContextConfiguration会告诉它需要在CDPlayerConfig中加载配置
+public class CDPlayerTest {
+
+  @Rule
+  public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+  @Autowired
+  private MediaPlayer player;
+  
+  @Autowired//将CompactDisc bean注入到测试代码之中
+  private CompactDisc cd;
+  
+  @Test
+  public void cdShouldNotBeNull() {
+    assertNotNull(cd);
+  }
+
+  @Test
+  public void play() {
+    player.play();
+    assertEquals(("Playing Sgt. Pepper's Lonely Hearts Club Band by The Beatles\n", log.getLog());
+  }
+
+}
+```
+
+2.2.2 为组件扫描的bean命名 
+
+Spring应用上下文中所有的bean都会给定一个ID。 在前面的例子中，尽管我们没有明确地为SgtPeppers bean设置ID， 但Spring会根据类名为其指定一个ID。 具体来讲， 这个bean所给定的ID为sgtPeppers， 也就是将类名的第一个字母变为小写 
+
+```java
+@Component("lonelyHeartsClub")//为这个bean设置不同的ID
+public class SgtPeppers implements CompactDisc {
+    
+}
+
+@Named("lonelyHeartsClub")//使用Java依赖注入规范（Java Dependency Injection）中所提供的@Named注解来为bean设置ID
+public class SgtPeppers implements CompactDisc {
+    
+}
+
+```
+
+2.2.3 设置组件扫描的基础包 
+
+```java
+@Configuration
+@ComponentScan("soundsystem")
+@ComponentScan(basePackages="soundsystem")//更加清晰地表明你所设置的是基础包
+//@ComponentScan(basePackages={"soundsystem","video"})//更加清晰地表明你所设置的是基础包  !!!!!!!!这种String类型表示方式类型不安全
+@ComponentScan(basePackageClasses={CDPlayer.class,DVDPlayer.class})//这些类所在的包将会作为组件扫描的基础包
+public class CDPlayerConfig { 
+}
+```
+
+2.2.4 通过为bean添加注解实现自动装配 
+
+自动装配就是让Spring自动满足bean依赖的一种方法， 在满足依赖的过程中， 会在Spring应用上下文中寻找匹配某个bean需求的其他bean。 为了声明要进行自动装配， 我们可以借助Spring的@Autowired注解 
+
+```java
+@Component
+public class CDPlayer implements MediaPlayer {
+  private CompactDisc cd;
+
+  @Autowired//构造器上添加@Autowired，这表明当Spring创建CDPlayer bean的时候， 会通过这个构造器来进行实例化并且会传入一个可设置给CompactDisc类型的bean
+  public CDPlayer(CompactDisc cd) {
+    this.cd = cd;
+  }
+
+  public void play() {
+    cd.play();
+  }
+  
+  //@Autowired//此注解还能用在属性的Setter方法上	依赖是通过带有@Autowired注解的方法进行声明的，也就是setCompactDisc()
+  //public void setCompactDisc(CompactDisc cd){
+  //	this.cd = cd;      
+  //}
+
+}
+```
+
+如果没有匹配的bean， 那么在应用上下文创建的时候， Spring会抛出一个异常 （可以将@Autowired的required属性设置为false   **@Autowired(required=false)**   ）
+
+如果有多个bean都能满足依赖关系的话， Spring将会抛出一个异常，表明没有明确指定要选择哪个bean进行自动装配 
+
+@Autowired可以换成@Inject (注解来源于Java依赖注入规范 )
+
+2.2.5 验证自动装配 
+
+<a href="#CDPlayerTest">CDPlayerTest</a>
