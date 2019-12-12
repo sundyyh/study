@@ -2179,3 +2179,74 @@ public class TrackCounter {
 - default-impl/delegate-ref:指定添加新功能接口的实现类，其中default-impl直接表示委托，delegate-ref指定一个bean，个人觉得后者较灵活。
 
 ### 4.5 注入AspectJ切面
+
+
+
+## 第5章 构建Spring Web应用程序  
+
+### 5.1 Spring MVC起步  
+
+**MVC三元组的概念**
+
+- Model(模型):组件等价于 实体层 + 业务逻辑层 + 持久层
+- View(视图):负责进行模型的展示，一般就是我们见到的用户界面，客户想看到的东西。
+- Controller(控制器):接收用户请求，委托给模型进行处理（状态改变），处理完毕后把返回的模型数据返回给视图
+
+![spring_mvc_request_flow](https://images2015.cnblogs.com/blog/791227/201611/791227-20161125140338768-995727439.png)
+
+具体步骤：
+
+第一步：发起请求到前端控制器（front controller） Servlet (DispatcherServlet)
+
+第二步：前端控制器请求HandlerMapping查找 Handler （可以根据xml配置、注解进行查找）
+
+第三步：处理器映射器HandlerMapping向前端控制器返回Handler，HandlerMapping会把请求映射为HandlerExecutionChain对象（包含一个Handler处理器（页面控制器）对象，多个HandlerInterceptor拦截器对象），通过这种策略模式，很容易添加新的映射策略
+
+第四步：前端控制器调用处理器适配器去执行Handler
+
+第五步：处理器适配器HandlerAdapter将会根据适配的结果去执行Handler
+
+第六步：Handler执行完成给适配器返回ModelAndView
+
+第七步：处理器适配器向前端控制器返回ModelAndView （ModelAndView是springmvc框架的一个底层对象，包括 Model和view）
+
+第八步：前端控制器请求视图解析器去进行视图解析 （根据逻辑视图名解析成真正的视图(jsp)），通过这种策略很容易更换其他视图技术，只需要更改视图解析器即可
+
+第九步：视图解析器向前端控制器返回View
+
+第十步：前端控制器进行视图渲染 （视图渲染将模型数据(在ModelAndView对象中)填充到request域）
+
+第十一步：前端控制器向用户响应结果
+
+[spring_mvc_flow](https://img-blog.csdnimg.cn/20190630145911981.png)
+具体流程：
+
+（1）首先浏览器发送请求——>DispatcherServlet，前端控制器收到请求后自己不进行处理，而是委托给其他的解析器进行处理，作为统一访问点，进行全局的流程控制；
+
+（2）DispatcherServlet——>HandlerMapping，处理器映射器将会把请求映射为HandlerExecutionChain对象（包含一个Handler处理器对象、多个HandlerInterceptor拦截器）对象；
+
+（3）DispatcherServlet——>HandlerAdapter，处理器适配器将会把处理器包装为适配器，从而支持多种类型的处理器，即适配器设计模式的应用，从而很容易支持很多类型的处理器；
+
+（4）HandlerAdapter——>调用处理器相应功能处理方法，并返回一个ModelAndView对象（包含模型数据、逻辑视图名）；
+
+（5）ModelAndView对象（Model部分是业务对象返回的模型数据，View部分为逻辑视图名）——> ViewResolver， 视图解析器将把逻辑视图名解析为具体的View；
+
+（6）View——>渲染，View会根据传进来的Model模型数据进行渲染，此处的Model实际是一个Map数据结构；
+
+（7）返回控制权给DispatcherServlet，由DispatcherServlet返回响应给用户，到此一个流程结束。
+
+
+在请求离开浏览器时 ， 会带有用户所请求内容的信息， 至少会包含请求的URL。 但是还可能带有其他的信息， 例如用户提交的表单信息。
+
+- 请求旅程的第一站是Spring的<code style="color:#c7254e;background-color: #f9f2f4;border-radius: 2px;">DispatcherServlet</code>。 与大多数基于Java的Web框架一样， Spring MVC所有的请求都会通过一个前端控制器（front controller） Servlet。 前端控制器是常用的Web应用程序模式， 在这里一个单实例的Servlet将请求委托给应用程序的其他组件来执行实际的处理。 在Spring MVC中， DispatcherServlet就是前端控制器。
+- DispatcherServlet的任务是将请求发送给Spring MVC控制器（controller） 。 控制器是一个用于处理请求的Spring组件。 在典型的应用程序中可能会有多个控制器， DispatcherServlet需要知道应该将请求发送给哪个控制器。 所以DispatcherServlet以会查询一个或多个处理器映射（handler mapping） 来确定请求的下一站在哪里。 处理器映射会根据请求所携带的URL信息来进行决策。
+- 一旦选择了合适的控制器， DispatcherServlet会将请求发送给选中的控制器 。 到了控制器， 请求会卸下其负载（用户提交的信息） 并耐心等待控制器处理这些信息。 （实际上， 设计良好的控制器本身只处理很少甚至不处理工作， 而是将业务逻辑委托给一个或多个服务对象进行处理。 ）
+- 控制器在完成逻辑处理后， 通常会产生一些信息， 这些信息需要返回给用户并在浏览器上显示。 这些信息被称为模型（model） 。 不过仅仅给用户返回原始的信息是不够的——这些信息需要以用户友好的方式进行格式化， 一般会是HTML。 所以， 信息需要发送给一个视图（view） ， 通常会是JSP。
+- 控制器所做的最后一件事就是将模型数据打包， 并且标示出用于渲染输出的视图名。 它接下来会将请求连同模型和视图名发送回DispatcherServlet 。
+  这样， 控制器就不会与特定的视图相耦合， 传递给DispatcherServlet的视图名并不直接表示某个特定的JSP。 实际
+  上， 它甚至并不能确定视图就是JSP。 相反， 它仅仅传递了一个逻辑名称， 这个名字将会用来查找产生结果的真正视图。 DispatcherServlet将会使用视图解析器（view resolver）来将逻辑视图名匹配为一个特定的视图实现， 它可能是也可能不是JSP。
+  既然DispatcherServlet已经知道由哪个视图渲染结果， 那请求的任务基本上也就完成了。 它的最后一站是视图的实现（可能是JSP） ， 在这里它交付模型数据。 请求的任务就完成了。 视图将使用模型数据渲染输出， 这个输出会通过响应对象传递给客户端（不会像听上去那样硬编码） 。
+  可以看到， 请求要经过很多的步骤， 最终才能形成返回给客户端的响应。 大多数的步骤都是在Spring框架内部完成的， 也就是图5.1所示的组件中。 尽管本章的主要内容都关注于如何编写控制器， 但在此之前我们首先看一下如何搭建Spring MVC的基础组件。
+
+#### 5.1.2 搭建Spring MVC  
+
