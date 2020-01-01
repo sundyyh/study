@@ -2238,7 +2238,7 @@ public class TrackCounter {
 
 在请求离开浏览器时 ， 会带有用户所请求内容的信息， 至少会包含请求的URL。 但是还可能带有其他的信息， 例如用户提交的表单信息。
 
-- 请求旅程的第一站是Spring的&lt;code style="color:#c7254e;background-color: #f9f2f4;border-radius: 2px;"&gt;DispatcherServlet&lt;/code&gt;。 与大多数基于Java的Web框架一样， Spring MVC所有的请求都会通过一个前端控制器（front controller） Servlet。 前端控制器是常用的Web应用程序模式， 在这里一个单实例的Servlet将请求委托给应用程序的其他组件来执行实际的处理。 在Spring MVC中， DispatcherServlet就是前端控制器。
+- 请求旅程的第一站是Spring的<code>DispatcherServlet</code>。 与大多数基于Java的Web框架一样， Spring MVC所有的请求都会通过一个前端控制器（front controller） Servlet。 前端控制器是常用的Web应用程序模式， 在这里一个单实例的Servlet将请求委托给应用程序的其他组件来执行实际的处理。 在Spring MVC中， DispatcherServlet就是前端控制器。
 - DispatcherServlet的任务是将请求发送给Spring MVC控制器（controller） 。 控制器是一个用于处理请求的Spring组件。 在典型的应用程序中可能会有多个控制器， DispatcherServlet需要知道应该将请求发送给哪个控制器。 所以DispatcherServlet以会查询一个或多个处理器映射（handler mapping） 来确定请求的下一站在哪里。 处理器映射会根据请求所携带的URL信息来进行决策。
 - 一旦选择了合适的控制器， DispatcherServlet会将请求发送给选中的控制器 。 到了控制器， 请求会卸下其负载（用户提交的信息） 并耐心等待控制器处理这些信息。 （实际上， 设计良好的控制器本身只处理很少甚至不处理工作， 而是将业务逻辑委托给一个或多个服务对象进行处理。 ）
 - 控制器在完成逻辑处理后， 通常会产生一些信息， 这些信息需要返回给用户并在浏览器上显示。 这些信息被称为模型（model） 。 不过仅仅给用户返回原始的信息是不够的——这些信息需要以用户友好的方式进行格式化， 一般会是HTML。 所以， 信息需要发送给一个视图（view） ， 通常会是JSP。
@@ -2249,4 +2249,411 @@ public class TrackCounter {
   可以看到， 请求要经过很多的步骤， 最终才能形成返回给客户端的响应。 大多数的步骤都是在Spring框架内部完成的， 也就是图5.1所示的组件中。 尽管本章的主要内容都关注于如何编写控制器， 但在此之前我们首先看一下如何搭建Spring MVC的基础组件。
 
 #### 5.1.2 搭建Spring MVC  
+
+扩展AbstractAnnotationConfigDispatcherServletInitializer的任意类都会自动地配置DispatcherServlet和Spring应用上下文， Spring的应用上下文会位于应用程序的Servlet上下文之中  
+
+```java
+package spittr.config;
+public class SpitterWebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+  @Override
+  protected Class<?>[] getRootConfigClasses() {
+    return new Class<?>[] { RootConfig.class };
+  }
+  @Override
+  protected Class<?>[] getServletConfigClasses() {
+    return new Class<?>[] { WebConfig.class };
+  }
+    /**将一个或多个路径映射到DispatcherServlet上。
+    本例中，它映射的是“/”，这表示它会是应用的默认Servlet。 它会处理进入应用的所有请求*/
+  @Override
+  protected String[] getServletMappings() {
+    return new String[] { "/" };
+  }
+}
+package spittr.config;
+@Configuration
+@Import(DataConfig.class)
+@ComponentScan(basePackages={"spittr"}, 
+    excludeFilters={
+        @Filter(type=FilterType.CUSTOM, value=WebPackage.class)
+    })
+public class RootConfig {
+  public static class WebPackage extends RegexPatternTypeFilter {
+    public WebPackage() {
+      super(Pattern.compile("spittr\\.web"));
+    }    
+  }
+}
+```
+
+使用 Servlet 3 规范（Tomcat7），可以使用 `java` 来配置 servlet，而不仅仅是 xml 文件
+
+>Servlet 3.0 规范和 Spring DispatcherServlet 配置
+>+ 在 Servlet 3.0 的环境中，容器会在 classpath 中寻找继承了 **javax.servlet.ServletContainerInitializer** 接口的类，用它来配置 servlet 容器。
+>+ Spring 提供了一个继承这个接口的类 SpringServletContainerInitializer，在这个类中，它会寻找任何继承了 WebApplicationInitializer 接口的类并用其来配置 servlet 容器。Spring 3.2 提供了一个继承了 WebApplicationInitializer 接口的基类 **AbstractAnnotationConfigDispatcherServletInitializer**。所以，你的 servlet 配置类只需要继承 AbstractAnnotationConfigDispatcherServletInitializer，部署到Servlet 3.0容器
+>  中的时候， 容器就会被发现而用于 servlet 容器的配置。
+
+当DispatcherServlet启动的时候， 它会创建Spring应用上下文，并加载配置文件或配置类中所声明的bean，在程序清单的
+getServletConfigClasses()方法中， 我们要求DispatcherServlet加载应用上下文时， 使用定义在WebConfig配置类（使用Java配置） 中的bean。但是在Spring Web应用中， 通常还会有另外一个应用上下文，它是由ContextLoaderListener创建的
+
+我们希望DispatcherServlet加载包含Web组件的bean， 如控制器、 视图解析器以及处理器映射， 而ContextLoaderListener要加载应用中的其他bean。 这些bean通常是驱动应用后端的中间层和数据层组件  
+
+实际上， AbstractAnnotationConfigDispatcherServletInitializer会同时创建DispatcherServlet和ContextLoaderListener。 getServletConfigClasses()方法返回的带有@Configuration注解的类将会用来定义DispatcherServlet应用上下文中的bean。 getRootConfigClasses()方法返回的带有@Configuration注解的类将会用来配置ContextLoaderListener创建的应用上下文中的bean  
+
+##### 启用Spring MVC
+
+以前， Spring是使用XML进行配置的， 你可以使用&lt;mvc:annotation-driven&gt;启用注解驱动的Spring MVC  
+
+现在让Spring MVC的搭建过程尽可能简单并基于Java进行配置,如下最简单的Spring MVC配置就是一个带有@EnableWebMvc注解的类  
+
+```java
+@Configuration
+@EnableWebMvc//启用springmvc
+public class WebConfig{}
+```
+
+这可以运行起来， 它的确能够启用Spring MVC， 但还有不少问题要解决：
+
+- 没有配置视图解析器。 如果这样的话， Spring默认会使用BeanNameViewResolver， 这个视图解析器会查找ID与视图名称匹配的bean， 并且查找的bean要实现View接口， 它以这样的方式来解析视图。
+- 没有启用组件扫描。 这样的结果就是， Spring只能找到显式声明在配置类中的控制器。
+- 这样配置的话， DispatcherServlet会映射为应用的默认Servlet， 所以它会处理所有的请求， 包括对静态资源的请求， 如图片和样式表（在大多数情况下， 这可能并不是你想要的效果） 。  
+
+```java
+package spittr.web;
+@Configuration
+@EnableWebMvc//启用springmvc
+@ComponentScan("spittr.web")//启用组件扫描
+public class WebConfig extends WebMvcConfigurerAdapter {
+  @Bean
+  public ViewResolver viewResolver() {//配置jsp视图解析器
+    InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+    resolver.setPrefix("/WEB-INF/views/");
+    resolver.setSuffix(".jsp");
+    return resolver;
+  }  
+  @Override
+  public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+    configurer.enable();//配置静态资源的处理:让DispatcherServlet将对静态资源的请求转发到Servlet容器中默认的Servlet上
+  }  
+}
+```
+
+### 5.2 编写基本的控制器
+
+在Spring MVC中， 控制器只是方法上添加了@RequestMapping注解的类， 这个注解声明了它们所要处理的请求。  
+
+```java
+@Controller//声明为一个控制器
+//@RequestMapping("/")
+public class HomeController {
+  @RequestMapping(value="/",method = GET)//处理对'/'的GET请求
+  public String home(Model model) {
+    return "home"; //视图名为home
+  }
+//因带有@Controller注解,因此组件扫描器会自动找到HomeController,并将其声明为Spring应用上下文中的一个bean
+}
+//Spring3.2开始包含了一种mock Spring MVC并针对控制器执行HTTP请求的机制  
+public class HomeControllerTest {
+  @Test
+  public void testHomePage() throws Exception {
+    HomeController controller = new HomeController();
+    MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    mockMvc.perform(get("/")).andExpect(view().name("home"));
+  }
+
+}
+
+//定义类级别的请求处理
+@Controller
+@RequestMapping("/")//将控制器映射到"/"
+@RequestMapping({"/","/homepage"})//数组
+public class HomeController {
+  @RequestMapping(method = GET)
+  public String home(Model model) {
+    return "home"; //视图名为home
+  }
+}
+```
+
+传递模型数据到视图中
+
+```java
+public interface SpittleRepository {
+  List<Spittle> findRecentSpittles();
+}
+
+@Controller
+@RequestMapping("/spittles")
+public class SpittleController {
+  private static final String MAX_LONG_AS_STRING = "9223372036854775807";
+  private SpittleRepository spittleRepository;
+
+  @Autowired
+  public SpittleController(SpittleRepository spittleRepository) {
+    this.spittleRepository = spittleRepository;
+  }
+ //Model实际上就是一个Map（也就是key-value对的集合） ， 它会传递给视图， 这样数据就能渲染到客户端了。 
+ //调用addAttribute()方法不指定key的时候， 那么key会根据值的对象类型推断确定
+  @RequestMapping(method=RequestMethod.GET)
+  public String spittles(Model model) {//此推断为spittleList
+    model.addAttribute(spittleRepository.findSpittles(Long.MAX_VALUE,20));
+    return "spittles";
+  }
+//逻辑视图的名称将会根据请求路径推断得出。 因为这个方法处理针对“/spittles”的GET请求， 因此视图的名称将会是spittles（去掉开头的斜线）
+  @RequestMapping(method=RequestMethod.GET)
+  public List<Spittle> spittles() {
+    return spittleRepository.findSpittles(max, count);
+  }
+  @RequestMapping(method=RequestMethod.GET)
+  public String spittles(Map map) {
+    return "spittles";
+  }
+}
+
+public class SpittleControllerTest {
+      @Test
+  public void houldShowRecentSpittles() throws Exception {
+    List<Spittle> expectedSpittles = createSpittleList(20);
+    SpittleRepository mockRepository = mock(SpittleRepository.class);
+    when(mockRepository.findSpittles(Long.MAX_VALUE, 20))
+        .thenReturn(expectedSpittles);
+
+    SpittleController controller = new SpittleController(mockRepository);
+    MockMvc mockMvc = standaloneSetup(controller)//mock Spring MVC 
+        .setSingleView(new InternalResourceView("/WEB-INF/views/spittles.jsp"))
+        .build();
+
+    mockMvc.perform(get("/spittles"))//对"/spittles"发起GET请求
+       .andExpect(view().name("spittles"))
+       .andExpect(model().attributeExists("spittleList"))
+       .andExpect(model().attribute("spittleList", hasItems(expectedSpittles.toArray())));//断言期望的值
+  }
+     
+  private List<Spittle> createSpittleList(int count) {
+    List<Spittle> spittles = new ArrayList<Spittle>();
+    for (int i=0; i < count; i++) {
+      spittles.add(new Spittle("Spittle " + i, new Date()));
+    }
+    return spittles;
+  }
+}
+```
+
+这个列表数据会发送到名为spittles的视图中。 按照我们配置InternalResourceViewResolver的方式， 视图的JSP将会**是/WEB-INF/views/spittles.jsp**
+
+### 5.3 接受请求的输入  
+
+Spring MVC允许以多种方式将客户端中的数据传送到控制器的处理器方法中， 包括：
+
+- 查询参数（Query Parameter）
+- 表单参数（Form Parameter）
+- 路径变量（Path Variable）
+
+#### 5.3.1 询参数
+
+```java
+  @RequestMapping(method=RequestMethod.GET)
+  public List<Spittle> spittles(
+      //因为查询参数都是String类型的， 因此defaultValue属性需要String类型的值
+      @RequestParam(value="max", defaultValue=MAX_LONG_AS_STRING) long max,
+      @RequestParam(value="count", defaultValue="20") int count) {
+    return spittleRepository.findSpittles(max, count);
+  }
+
+  @Test
+  public void shouldShowPagedSpittles() throws Exception {
+    List<Spittle> expectedSpittles = createSpittleList(50);
+    SpittleRepository mockRepository = mock(SpittleRepository.class);
+    when(mockRepository.findSpittles(238900, 50))
+        .thenReturn(expectedSpittles);
+    
+    SpittleController controller = new SpittleController(mockRepository);
+    MockMvc mockMvc = standaloneSetup(controller)
+        .setSingleView(new InternalResourceView("/WEB-INF/views/spittles.jsp"))
+        .build();
+
+    mockMvc.perform(get("/spittles?max=238900&count=50"))//传入参数
+      .andExpect(view().name("spittles"))
+      .andExpect(model().attributeExists("spittleList"))
+      .andExpect(model().attribute("spittleList",  hasItems(expectedSpittles.toArray())));
+  }
+```
+
+#### 5.3.2 通过路径参数接受输入  
+
+以面向资源的控制器作为目标  “/spittles/12345”发起GET请求要优于对“/spittles/show?spittle_id=12345”发起请求
+
+```java
+
+  @RequestMapping(value="/{spittleId}", method=RequestMethod.GET)// 占位符
+  public String spittle(@PathVariable("spittleId") long spittleId,  Model model) {
+    model.addAttribute(spittleRepository.findOne(spittleId));
+    return "spittle";
+  }
+
+  @Test
+  public void testSpittle() throws Exception {
+    Spittle expectedSpittle = new Spittle("Hello", new Date());
+    SpittleRepository mockRepository = mock(SpittleRepository.class);
+    when(mockRepository.findOne(12345)).thenReturn(expectedSpittle);
+    
+    SpittleController controller = new SpittleController(mockRepository);
+    MockMvc mockMvc = standaloneSetup(controller).build();
+
+    mockMvc.perform(get("/spittles/12345"))
+      .andExpect(view().name("spittle"))
+      .andExpect(model().attributeExists("spittle"))
+      .andExpect(model().attribute("spittle", expectedSpittle));
+  }
+```
+
+@PathVariable("spittleId")注解， 这表明在请求路径中， 不管占位符部分的值是什么都会传递到处理器方法的spittleId参数中 
+
+如果@PathVariable中没有value属性的话， 它会假设占位符的名称与方法的参数名相同   
+
+### 5.4 处理表单  
+
+```java
+@Controller
+@RequestMapping("/spitter")
+public class SpitterController {
+  private SpitterRepository spitterRepository;
+  @Autowired
+  public SpitterController(SpitterRepository spitterRepository) {
+    this.spitterRepository = spitterRepository;
+  }
+  
+  @RequestMapping(value="/register", method=GET)
+  public String showRegistrationForm() {
+    return "registerForm";
+  }
+  
+  @RequestMapping(value="/register", method=POST)
+  public String processRegistration(@Valid Spitter spitter,  Errors errors) {
+    if (errors.hasErrors()) {
+      return "registerForm";
+    }
+    spitterRepository.save(spitter);
+    return "redirect:/spitter/" + spitter.getUsername();
+  }
+  
+  @RequestMapping(value="/{username}", method=GET)
+  public String showSpitterProfile(@PathVariable String username, Model model) {
+    Spitter spitter = spitterRepository.findByUsername(username);
+    model.addAttribute(spitter);
+    return "profile";
+  }
+  
+}
+
+public class SpitterControllerTest {
+
+  @Test
+  public void shouldShowRegistration() throws Exception {
+    SpitterRepository mockRepository = mock(SpitterRepository.class);
+    SpitterController controller = new SpitterController(mockRepository);
+    MockMvc mockMvc = standaloneSetup(controller).build();
+    mockMvc.perform(get("/spitter/register"))
+           .andExpect(view().name("registerForm"));
+  }
+  
+  @Test
+  public void shouldProcessRegistration() throws Exception {
+    SpitterRepository mockRepository = mock(SpitterRepository.class);
+    Spitter unsaved = new Spitter("jbauer", "24hours", "Jack", "Bauer", "jbauer@ctu.gov");
+    Spitter saved = new Spitter(24L, "jbauer", "24hours", "Jack", "Bauer", "jbauer@ctu.gov");
+    when(mockRepository.save(unsaved)).thenReturn(saved);
+    
+    SpitterController controller = new SpitterController(mockRepository);
+    MockMvc mockMvc = standaloneSetup(controller).build();
+
+    mockMvc.perform(post("/spitter/register")
+           .param("firstName", "Jack")
+           .param("lastName", "Bauer")
+           .param("username", "jbauer")
+           .param("password", "24hours")
+           .param("email", "jbauer@ctu.gov"))
+           .andExpect(redirectedUrl("/spitter/jbauer"));//浏览器的刷新重复提交使用重定向
+    
+    verify(mockRepository, atLeastOnce()).save(unsaved);
+  }
+
+  @Test
+  public void shouldFailValidationWithNoData() throws Exception {
+    SpitterRepository mockRepository = mock(SpitterRepository.class);    
+    SpitterController controller = new SpitterController(mockRepository);
+    MockMvc mockMvc = standaloneSetup(controller).build();
+    
+    mockMvc.perform(post("/spitter/register"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("registerForm"))
+        .andExpect(model().errorCount(5))
+        .andExpect(model().attributeHasFieldErrors(
+            "spitter", "firstName", "lastName", "username", "password", "email"));
+  }
+
+}
+```
+
+当InternalResourceViewResolver看到视图格式中的“redirect:”前缀时， 它就知道要将其解析为重定向的规则， 而不是视图的名称  
+
+除了“redirect:”， InternalResourceViewResolver还能识别“forward:”前缀。 当它发现视图格式中以“forward:”作为前缀时， 请求将会前往（forward） 指定的URL路径， 而不再是重定向 
+
+#### 5.4.2 校验表单
+
+Spring对Java校验API（Java Validation API， 又称JSR-303） 的支持。 从Spring 3.0开始， 在Spring MVC中提供了对Java校验API的支持
+
+Java校验API定义了多个注解， 这些注解可以放到属性上， 从而限制这些属性的值。 所有的注解都位于javax.validation.constraints包中
+
+| 注解         | 描 述                                                        |
+| :----------- | ------------------------------------------------------------ |
+| @AssertFalse | 所注解的元素必须是Boolean类型， 并且值为false                |
+| @AssertTrue  | 所注解的元素必须是Boolean类型， 并且值为true                 |
+| @DecimalMax  | 所注解的元素必须是数字， 并且它的值要小于或等于给定的BigDecimalString值 |
+| @DecimalMin  | 所注解的元素必须是数字， 并且它的值要大于或等于给定的BigDecimalString值 |
+| @Digits      | 所注解的元素必须是数字， 并且它的值必须有指定的位数          |
+| @Future      | 所注解的元素的值必须是一个将来的日期                         |
+| @Max         | 所注解的元素必须是数字， 并且它的值要小于或等于给定的值      |
+| @Min         | 所注解的元素必须是数字， 并且它的值要大于或等于给定的值      |
+| @NotNull     | 所注解元素的值必须不能为null                                 |
+| @Null        | 所注解元素的值必须为null                                     |
+| @Past        | 所注解的元素的值必须是一个已过去的日期                       |
+| @Pattern     | 所注解的元素的值必须匹配给定的正则表达式                     |
+| @Size        | 所注解的元素的值必须是String、 集合或数组， 并且它的长度要符合给定的范围 |
+
+```java
+public class Spitter {
+  @NotNull
+  @Size(min=5, max=16)//非空，5到16个字符
+  private String username;
+  @NotNull
+  @Size(min=5, max=25)
+  private String password;
+  @Override
+  public boolean equals(Object that) {
+    return EqualsBuilder.reflectionEquals(this, that, "username", "password");
+  }
+  
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, "username", "password");
+  }
+}
+
+ @RequestMapping(value="/register", method=POST)
+  public String processRegistration(@Valid Spitter spitter, Errors errors) {
+    if (errors.hasErrors()) {
+      return "registerForm";
+    }
+    
+    spitterRepository.save(spitter);
+    return "redirect:/spitter/" + spitter.getUsername();
+  }
+```
+
+spitter参数添加了@Valid注解， 这会告知Spring， 需要确保这个对象满足校验限制，如果有校验出现错误的话， 那么这些错误可以通过Errors对象进行访问，Errors参数要紧跟在带有@Valid注解的参数后面， @Valid注解所标注的就是要检验的参数。  
+
+
+
+
 
