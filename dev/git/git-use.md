@@ -458,14 +458,17 @@ git diff HEAD^ appple.txt
 ##### 	3.分支管理
 
 ```shell
-$ git branch -v		#查看所有分支
-$ git branch hot_fix #创建hot_fix分支
-$ ckout hot_fix 
+$ git branch -v		#查看本地所有分支
+$ git branch -a		#查看本地/远程所有分支(结果列表中前面标*号的表示当前使用分支)
+$ git branch 		#查看当前使用分支(结果列表中前面标*号的表示当前使用分支)
+$ git branch hot_fix	#创建hot_fix分支
+$ git checkout remotes/origin/dev
+ 
 ```
 
 创建分支：git branch 【分支名】
 
-查看分支：git branch -v
+查看本地分支分支：git branch -v 或 git branch
 
 切换分支：git checkout【分支名】
 
