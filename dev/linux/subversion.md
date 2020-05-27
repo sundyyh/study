@@ -13,7 +13,7 @@ svn co
 4. svn checkout svn://路径(目录或文件的全路径)　[本地目录全路径] --username　用户名
 
 ### 提交
-```
+```shell
     svn add 文件名
     // 添加test.php 
     svn add test.php
@@ -28,7 +28,7 @@ svn co
 告诉SVN服务器要添加文件了，还要用svn commit -m真实的上传上去
 
 ### 更新
-```
+```sh
 //后面没有目录，默认将当前目录以及子目录下的所有文件都更新到最新版本
 svn update 
 //更新与版本库同步
