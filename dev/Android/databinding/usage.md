@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity() {
 
 自定义参数绑定：BindingAdapter
 
-![](https://github.com/sundyyh/study/blob/master/imgs/support_binding_view.webp)
+![](https://github.com/sundyyh/study/blob/master/imgs/support_binding_view.jpg)
 
 除了上述的参数外，我们也可以使用 BindingAdapter 创建自定义参数。
 
