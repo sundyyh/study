@@ -100,8 +100,12 @@ binding = ActivityMainBinding.inflate(layoutInflater, null, false)
 ```
 ### 绑定普通数据
     DataBinding 可以绑定普通数据对象（非 Observable/LiveData)，例如上述例子中绑定了一个 String 类型的数据。绑定普通数据我们只需要按照上述的代码设置即可。
-### 绑定可观察数据
-    绑定可观察数据意味着当数据变化时 UI 会跟着一起变化，绑定可观察数据有三种方式：objects、fields 和 collections
+### 单向绑定（绑定可观察数据），单向绑定刷新UI有三种
+- BaseObservable
+- ObservableField
+- ObservableCollection
+
+>绑定可观察数据意味着当数据变化时 UI 会跟着一起变化，绑定可观察数据有三种方式：objects、fields 和 collections
 
 #### 对单个变量的绑定：fields
 对于一些数据类，如果我们不想继承 BaseObservable 或者只需要其中几个字段支持可观察，那么可以使用这种方式来创建可观察数据：
@@ -164,13 +168,18 @@ binding.list = list
 
 >这种是最常用的一种方式，需要绑定的数据实体类继承 BaseObservable：
 
+BaseObservable提供了两个刷新UI的方法
+- notifyPropertyChanged(); 只会刷新属于它的UI，就如代码，他只会更新country。
+- notifyChange(); 会刷新所有UI。
+
 ```kotlin
+//Bean类继承BaseObservable
 class Person : BaseObservable() {
     @get:Bindable
     var country: String = ""
         set(value) {
             field = value
-            notifyPropertyChanged(BR.country)
+            notifyChange()
         }
     
     @get:Bindable
@@ -185,6 +194,23 @@ class Person : BaseObservable() {
 首先要在需要支持可观察的数据上添加 @get:Bindable 注解，然后重写 set 方法，在其中调用 notifyPropertyChanged 方法表示更新该数据，BR 是自动生成的，包名跟当前包名一致，会根据 Bindable 注解的变量生成对应的值；也可以调用 notifyChange() 方法更新所有数据。
 
 ####双向绑定
+
+
+>双向属性
+
+|类|	属性|绑定适配器|
+|:---- | :---- | :---- |
+|AdapterView	|android:selectedItemPosition android:selection |AdapterViewBindingAdapter|
+|CalendarView	|android:date									|CalendarViewBindingAdapter|
+|CompoundButton |android:checked								|CompoundButtonBindingAdapter|
+|DatePicker     |android:year android:month android:day			|DatePickerBindingAdapter|
+|NumberPicker   |android:value									|PickerBindingAdapter|
+|RadioButton    |android:checkedButton							|RadioGroupBindingAdapter|
+|RatingBar      |android:rating									|RatingBarBindingAdapter|
+|SeekBar		|android:progress								|SeekBarBindingAdapter|
+|TabHost		|android:currentTab								|TabHostBindingAdapter|
+|TextView		|android:text									|TextViewBindingAdapter|
+|TimePicker		|android:hour android:minute					|TimePickerBindingAdapter|
 上述的单向绑定是指数据变化后更新 UI，而双向绑定是指其中任意一个变化后都会同步更新到另一个。
 
 >双向绑定使用 @={} 表达式来实现：
@@ -220,11 +246,15 @@ class Person : BaseObservable() {
     </data>
 ...
     <Button
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="10dp"
-       android:onClick="@{handler::onToastBtnClick}"
-       android:text="ToastClick"/>
+       android:onClick="@{handler::onToastBtnClick}"/>
+    <Button
+       android:id="@+id/btnBindEventTwo"
+       android:onClick="@{() ->handler.clickNoParam()}"
+       android:text="无参事件绑定" />
+   <EditText
+               android:afterTextChanged="@{handler.afterUserNameChanged}"
+               android:hint="请输入密码"
+               android:password="true"/>
 </layout>
 ```
 然后我们写好监听事件，绑定到 binding 中即可：
@@ -242,13 +272,20 @@ class MainActivity : AppCompatActivity() {
         fun onToastBtnClick(v: View) {
             Toast.makeText(this@MainActivity, "Click", Toast.LENGTH_SHORT).show()
         }
+        fun clickNoParam() {
+            Toast.makeText(this@LiveDataActivity, "click No Param", Toast.LENGTH_SHORT).show()
+        }
+         fun  afterUserNameChanged(editable:Editable ) {
+                    dataBean.getUsername().set(editable.toString())
+        }
     }
 }
 ```
 
 自定义参数绑定：BindingAdapter
 
-![](https://github.com/sundyyh/study/blob/master/imgs/support_binding_view.jpg)
+
+https://user-gold-cdn.xitu.io/2019/5/28/16afebaf06985e3c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1
 
 除了上述的参数外，我们也可以使用 BindingAdapter 创建自定义参数。
 
@@ -269,6 +306,10 @@ fun ImageView.loadImage(url: String) =
     imageUrl="@{imageUrl}"
     android:layout_gravity="center_horizontal"/>
 ```
+[双向数据绑定](https://developer.android.google.cn/topic/libraries/data-binding/two-way)
+
+### demo
+- [databinding-samples](https://github.com/android/databinding-samples)
 
 //性别
 val sex = MutableLiveData<Int>()
