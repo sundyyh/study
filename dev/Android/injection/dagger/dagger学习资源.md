@@ -1,3 +1,6 @@
+#### [听说你还不会用Dagger2？Dagger2 For Android最佳实践教程](https://juejin.im/post/6844903696417947662)
+
+
 - JohnnyShieh
 
     [Dagger 2 完全解析（一），Dagger 2 的基本使用与原理](https://www.jianshu.com/p/26d9f99ea3bb)
