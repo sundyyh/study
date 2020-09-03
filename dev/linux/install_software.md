@@ -12,7 +12,11 @@
 
 [liunx 系统 （ubuntu(优麒麟)）如何 配置JDK的方法](https://blog.csdn.net/qq_33716443/article/details/51760650)
 
-
+### 安装git
+```jshelllanguage
+sudo apt install git
+```
+   android studio配置git位置 /usr/lib/git-core/git
 ###1.Chrome
 
 - 32位
