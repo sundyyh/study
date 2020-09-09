@@ -4,6 +4,7 @@
 
 ```shell
 yum install vim
+sudo apt-get install vim
 ```
 
 2.打开文件 vim text

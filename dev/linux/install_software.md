@@ -4,6 +4,7 @@
 
 安装vim ：sudo apt install vim
 安装git ：apt install git
+安装jdk ：sudo apt install openjdk-8-jre-headless
 安装svn ：sudo apt-get install subversion
 
 [Windows10远程桌面Ubuntu优麒麟](https://my.oschina.net/chipo/blog/3111230)
