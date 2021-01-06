@@ -23,7 +23,6 @@
    
    
    
-   
    https://github.com/Solido/awesome-flutter
    
 https://flutter.cn/
@@ -31,5 +30,8 @@ https://flutter.cn/
 [flutter中文网](https://flutterchina.club/)
 
 [Flutter 一些常用库](https://www.cnblogs.com/yangyxd/p/9232308.html)
+
+flutter 依赖 C:\Users\用户名\AppData\Local\Pub\Cache\hosted\pub.flutter-io.cn
+   
 
 
