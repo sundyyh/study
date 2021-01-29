@@ -337,6 +337,7 @@ class Child extends Parent {
   void fun2(int a, int c){
      print(a+c); //3
   }
+}
 ```
 
 
