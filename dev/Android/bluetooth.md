@@ -6,7 +6,9 @@
 
 [android扫描蓝牙信号的小结，startLeScan（）方法和startDiscovery()方法](https://blog.csdn.net/weixin_44248028/article/details/106174892)
 
-[Android-经典蓝牙(BT)-建立长连接传输短消息和文件](https://blog.csdn.net/qq_32115439/article/details/80379262?utm_term=android%E8%93%9D%E7%89%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6&utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~all~sobaiduweb~default-1-80379262&spm=3001.4430)
+[Android-经典蓝牙(BT)-建立长连接传输短消息和文件](https://www.jianshu.com/p/977ab323c0a5)
+
+[Android-低功耗蓝牙(BLE)-客户端(主机/中心设备)和服务端(从机/外围设备)](https://www.jianshu.com/p/8ac31a5070d4)
 
 
 ![](https://github.com/sundyyh/study/blob/master/imgs/bluetooth/1.jpg)
