@@ -1,0 +1,70 @@
+[官方文档   ](https://developer.android.com/guide/topics/connectivity/bluetooth)
+
+[Android 蓝牙开发之搜索、配对、连接、通信大全](https://blog.csdn.net/qq_25827845/article/details/52997523)
+
+[Android蓝牙自动配对Demo，亲测好使！！！](https://blog.csdn.net/qq_25827845/article/details/52400782)
+
+[android扫描蓝牙信号的小结，startLeScan（）方法和startDiscovery()方法](https://blog.csdn.net/weixin_44248028/article/details/106174892)
+
+[Android-经典蓝牙(BT)-建立长连接传输短消息和文件](https://blog.csdn.net/qq_32115439/article/details/80379262?utm_term=android%E8%93%9D%E7%89%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6&utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~all~sobaiduweb~default-1-80379262&spm=3001.4430)
+
+
+![](https://github.com/sundyyh/study/blob/master/imgs/bluetooth/1.jpg)
+
+![](https://github.com/sundyyh/study/blob/master/imgs/bluetooth/2.jpg)
+
+```
+从蓝牙4.0开始包含两个蓝牙芯片模块：传统/经典蓝牙模块(Classic Bluetooth,简称BT)和低功耗蓝牙(Bluetooth Low Energy,简称BLE)	
+经典蓝牙是在之前的蓝牙1.0,1.2,2.0+EDR,2.1+EDR,3.0+EDR等基础上发展和完善起来的, 而低功耗蓝牙是Nokia的Wibree标准上发展起来的，是完全不同两个标准。
+1.经典蓝牙模块(BT)
+泛指蓝牙4.0以下的模块，一般用于数据量比较大的传输，如：语音、音乐、较高数据量传输等。
+经典蓝牙模块可再细分为：传统蓝牙模块和高速蓝牙模块。
+传统蓝牙模块在2004年推出，主要代表是支持蓝牙2.1协议的模块，在智能手机爆发的时期得到广泛支持。
+高速蓝牙模块在2009年推出，速率提高到约24Mbps，是传统蓝牙模块的八倍。	
+传统蓝牙有3个功率级别，Class1,Class2,Class3,分别支持100m,10m,1m的传输距离
+
+2.低功耗蓝牙模块(BLE)
+泛指蓝牙4.0或更高的模块，蓝牙低功耗技术是低成本、短距离、可互操作的鲁棒性无线技术，工作在免许可的2.4GHz ISM射频频段。
+因为BLE技术采用非常快速的连接方式，因此平时可以处于“非连接”状态（节省能源），
+此时链路两端相互间只是知晓对方，只有在必要时才开启链路，然后在尽可能短的时间内关闭链路(每次最多传输20字节)。
+低功耗蓝牙无功率级别，一般发送功率在7dBm，一般在空旷距离，达到20m应该是没有问题
+
+Android手机蓝牙4.x都是双模蓝牙(既有经典蓝牙也有低功耗蓝牙)，而某些蓝牙设备为了省电是单模(只支持低功耗蓝牙)
+		
+开发者选经典蓝牙,还是BLE?
+经典蓝牙：	
+	1.传声音
+	如蓝牙耳机、蓝牙音箱。蓝牙设计的时候就是为了传声音的，所以是近距离的音频传输的不二选择。
+	现在也有基于WIFI的音频传输方案，例如Airplay等，但是WIFI功耗比蓝牙大很多，设备无法做到便携。
+	因此固定的音响有WIFI的，移动的如耳机、便携音箱清一色都是基于经典蓝牙协议的。
+	
+	2.传大量数据
+	例如某些工控场景，使用Android或Linux主控，外挂蓝牙遥控设备的，
+	可以使用经典蓝牙里的SPP协议，当作一个无线串口使用。速度比BLE传输快多了。
+	这里要注意的是，iPhone没有开放
+	
+BLE蓝牙:
+	耗电低，数据量小，如遥控类(鼠标、键盘)，传感设备(心跳带、血压计、温度传感器、共享单车锁、智能锁、防丢器、室内定位)
+	是目前手机和智能硬件通信的性价比最高的手段，直线距离约50米，一节5号电池能用一年，传输模组成本10块钱，远比WIFI、4G等大数据量的通信协议更实用。
+	虽然蓝牙距离近了点，但胜在直连手机，价格超便宜。以室内定位为例，商场每家门店挂个蓝牙beacon，
+	就可以对手机做到精度10米级的室内定位，一个beacon的价格也就几十块钱而已
+
+双模蓝牙:
+	如智能电视遥控器、降噪耳机等。很多智能电视配的遥控器带有语音识别，需要用经典蓝牙才能传输声音。
+	而如果做复杂的按键，例如原本键盘表上没有的功能，经典蓝牙的HID按键协议就不行了，得用BLE做私有协议。
+	包括很多降噪耳机上通过APP来调节降噪效果，也是通过BLE来实现的私有通信协议。
+```
+
+
+[BLE](https://github.com/GitHubZhangLie/BLE-master)
+
+    Android BLE基础操作框架，基于回调，操作简单。包含扫描、多连接、广播包解析、服务读写及通知等功能。
+    
+[FastBle](https://github.com/anharismail/FastBle)
+
+    使用简单的方式进行 过滤、扫描、连接、读、写、通知订阅与取消
+    支持获取信号强度、设置最大传输单元
+    支持自定义扫描规则
+    支持多设备连接
+    支持重连机制
+    支持配置超时机制
