@@ -11,9 +11,9 @@
 [Android-低功耗蓝牙(BLE)-客户端(主机/中心设备)和服务端(从机/外围设备)](https://www.jianshu.com/p/8ac31a5070d4)
 
 
-![](https://github.com/sundyyh/study/blob/master/imgs/bluetooth/1.jpg)
+![](http://gitee.com/holder_zone/study/blob/master/imgs/bluetooth/1.jpg)
 
-![](https://github.com/sundyyh/study/blob/master/imgs/bluetooth/2.jpg)
+![](http://gitee.com/holder_zone/study/blob/master/imgs/bluetooth/2.jpg)
 
 ```
 从蓝牙4.0开始包含两个蓝牙芯片模块：传统/经典蓝牙模块(Classic Bluetooth,简称BT)和低功耗蓝牙(Bluetooth Low Energy,简称BLE)	

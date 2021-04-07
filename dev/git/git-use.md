@@ -12,7 +12,7 @@
 
 ​	3).Select Comonents
 
-​	![](https://github.com/sundyyh/study/blob/master/imgs/git_install_select_components.jpg)
+​	![](http://gitee.com/holder_zone/study/blob/master/imgs/git_install_select_components.jpg)
 
 ​		说明：
 
@@ -40,13 +40,13 @@
 
 ​		（3）二者都有：上面二者同时配置，但是注意，这样会将windows中的find.exe 和 sort.exe工具覆盖，如果不懂这些尽量不要选择。
 
-![](https://github.com/sundyyh/study/blob/master/imgs/git-install-path-environment.jpg)
+![](http://gitee.com/holder_zone/study/blob/master/imgs/git-install-path-environment.jpg)
 
 ​	7).Choosing HTTPS transport backend 选择HTTPS连接库，这里可以选择默认，然后Next
 
 ​	8).Configuring the line ending conversions
 
-![](https://github.com/sundyyh/study/blob/master/imgs/git_install_configuring_the_line_ending_conversions.png.jpg)
+![](https://gitee.com/holder_zone/study/blob/master/imgs/git_install_configuring_the_line_ending_conversions.png)
 		配置行结束符，选择第一项，意思是"取出文件时使用windows风格，提交文件时使用unix风格"
 
 ​		选择提交的时候换行格式
@@ -72,10 +72,10 @@
 ## 版本库
 
 工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。**git中的.git/refs/heads/master是分支，是版本**
-![版本库图片](https://github.com/sundyyh/study/blob/master/imgs/git_branch_info.jpg)
+![版本库图片](http://gitee.com/holder_zone/study/blob/master/imgs/git_branch_info.jpg)
 
 下面这个图展示了工作区、版本库中的暂存区和版本库之间的关系：
-![工作区、版本库中的暂存区和版本库之间的关系](https://github.com/sundyyh/study/blob/master/imgs/git_install_configuring_the_line_ending_conversions.png)
+![工作区、版本库中的暂存区和版本库之间的关系](http://gitee.com/holder_zone/study/blob/master/imgs/git_install_configuring_the_line_ending_conversions.png)
 
 图中左侧为工作区，右侧为版本库。在版本库中标记为"index" 的区域是暂存区（stage,index），标记为 "master"的是 master 分支所代表的目录树。
 
@@ -519,10 +519,10 @@ git commit "init commit" test.txt
 $ git remote -v
 #什么都没有
 
-$ origin remote add origin https://github.com/sundyyh/study
+$ origin remote add origin http://gitee.com/holder_zone/study
 $ git remote -v
-origin  https://github.com/sundyyh/study (fetch)
-origin  https://github.com/sundyyh/study (push)
+origin  http://gitee.com/holder_zone/study (fetch)
+origin  http://gitee.com/holder_zone/study (push)
 ```
 
 5.推送
@@ -549,9 +549,9 @@ git clone 项目地址
 
 新加入项目的人修改文件后提交本地仓库后，使用**git push origin master**  推送到远程仓库如果没加入项目会如下提示：
 
- git push https://github.com/sundyyh/study.git master 
+ git push http://gitee.com/holder_zone/study.git master 
 
-remote: Permission to sundyyh/study.git denied to sundyyh. fatal: unable to access https://github.com/sundyyh/study.git: The requested URL returned error: 403
+remote: Permission to sundyyh/study.git denied to sundyyh. fatal: unable to access http://gitee.com/holder_zone/study.git: The requested URL returned error: 403
 
 
 
