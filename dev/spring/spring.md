@@ -165,7 +165,7 @@ DI能够让相互协作的软件组件保持松散耦合， 而面向切面编�
 
 - 组件会因为那些与自身核心业务无关的代码而变得混乱。 一个向地址簿增加地址条目的方法应该只关注如何添加地址， 而不应该关注它是不是安全的或者是否需要支持事务 
 
-![](http://gitee.com/holder_zone/study/blob/master/imgs/aop_system_relation.jpg)
+![](https://github.com/sundyyh/study/blob/master/imgs/aop_system_relation.jpg)
 
 左边的业务对象与系统级服务结合得过于紧密。 每个对象不但要知道它需要记日志、 进行安全控制和参与事务， 还要亲自执行这些服务 
 
@@ -175,7 +175,7 @@ AOP能够使这些服务模块化， 并以声明的方式将它们应用到它�
 
 我们可以把切面想象为覆盖在很多组件之上的一个外壳。 应用是由那些实现各自业务功能的模块组成的。 借助AOP， 可以使用各种功能层去包裹核心业务层。 这些层以声明的方式灵活地应用到系统中， 你的核心应用甚至根本不知道它们的存在。 这是一个非常强大的理念， 可以将安全、 事务和日志关注点与核心业务逻辑相分离 
 
-![](http://gitee.com/holder_zone/study/blob/master/imgs/aop_system_relation_after.jpg)
+![](https://github.com/sundyyh/study/blob/master/imgs/aop_system_relation_after.jpg)
 
 ​	不使用AOP
 
@@ -331,7 +331,7 @@ ApplicationContext context=new  AnnotationConfigApplicationContext(com.springina
 
 图展示了bean装载到Spring应用上下文中的一个典型的生命周期过程。 
 
-![](http://gitee.com/holder_zone/study/blob/master/imgs/spring_bean_lifecycle.jpg)
+![](https://github.com/sundyyh/study/blob/master/imgs/spring_bean_lifecycle.jpg)
 
 <kbd>实例化</kbd>-><kbd>扩充属性</kbd>-><kbd>调用BeanNameAware的setBeanName()方法 </kbd>-><kbd>调用BeanFactoryAware的setBeanFactory()方法 </kbd>-><kbd>调用ApplicationContextAware接口的setApplicationContext()方法 </kbd>-><kbd>调用BeanPostProcessor的预初始化方法 </kbd>-><kbd>调用InitializingBean的afterPropertiesSet()方法 </kbd>-><kbd>调用自定的初始化方法</kbd>-><kbd>调用BeanPostProcessor的初始化方法</kbd>-><kbd>此时， bean已经准备就绪， 可以被应用程序使用了， 它们将一直
 驻留在应用上下文中， 直到该应用上下文被销毁 </kbd>-><kbd>容器关闭</kbd>-><kbd>调用DisposableBean 的destroy()方法</kbd>-><kbd>调用自定的销毁方法</kbd>
