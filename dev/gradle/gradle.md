@@ -6,3 +6,5 @@
 [gradle超详细解析](https://www.jianshu.com/p/822e44a5ea97)
 
 [转)Gradle依赖项学习总结，dependencies、transitive、force、exclude的使用与依赖冲突解决](https://www.jianshu.com/p/429733dbbc34)
+
+[Gradle之resValue自定义资源](https://www.jianshu.com/p/5b441bf8723d)

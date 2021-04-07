@@ -21,3 +21,7 @@
 [让复杂动画如此简单---lottie](https://github.com/airbnb/lottie-android)
 
 [SVG-Android](https://github.com/MegatronKing/SVG-Android)
+
+
+[用的广告栏控件，让你轻松实现广告头效果,支持无限循环](https://github.com/saiwu-bigkoo/Android-ConvenientBanner)
+

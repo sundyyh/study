@@ -26,3 +26,8 @@
 
 广告轮播
 https://github.com/saiwu-bigkoo/Android-ConvenientBanner
+
+
+[Android 开源项目分类汇总，更全更新可见 codekk.com](https://github.com/Trinea/android-open-project)
+
+[ Android UI 组件](https://www.oschina.net/project/tag/342/android-ui?lang=0&os=0&sort=view&p=1)
