@@ -27,3 +27,24 @@
 
 [Android官方架构组件DataBinding-Ex: 双向绑定篇](https://blog.csdn.net/mq2553299/article/details/86501045)
 
+
+
+[记录data binding和CleanArchitecture框架的使用](https://www.jianshu.com/p/820f4729d853)
+
+[DataBinding使用指南(二)：使用可观察的数据对象](https://blog.csdn.net/guiying712/article/details/80343247)
+
+[Android 安卓DataBinding（三）·单向绑定 BaseObservable](https://blog.csdn.net/qq_40881680/article/details/101800669  )
+
+[DataBinding（一）-初识](https://www.jianshu.com/p/6cd7d19c1f9a)
+
+[DataBinding（二）-实战](https://www.jianshu.com/p/46426c2564f2)
+
+[]()
+
+[DataBinding快速入门（还在用findViewById？）](https://blog.csdn.net/a10615/article/details/52781956)
+
+[]()
+
+[]()
+
+[]()

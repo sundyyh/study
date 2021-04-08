@@ -28,3 +28,11 @@
 
 
 [Android之ListView异步加载网络图片(优化缓存机制)](https://blog.csdn.net/zircon_1973/article/details/7693839)
+
+[CircleImageView](https://github.com/hdodenhof/CircleImageView)
+![](https://camo.githubusercontent.com/09b77bd11b3f4ae551b08bf0dec47675b958c728916c0c500ee2d1778a82a403/68747470733a2f2f7261772e6769746875622e636f6d2f68646f64656e686f662f436972636c65496d616765566965772f6d61737465722f73637265656e73686f742e706e67)
+
+[](https://github.com/wasabeef/glide-transformations)
+
+![](https://github.com/wasabeef/glide-transformations/blob/main/art/demo.gif)
+

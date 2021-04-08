@@ -12,3 +12,17 @@
 
 
 [图忆](https://github.com/donlan/Tuyi)
+
+
+[开源中国](https://gitee.com/oschina/git-osc)
+
+[OSChina Android](https://gitee.com/oschina/android-app)
+
+[open-source-android-apps](https://github.com/pcqpcq/open-source-android-apps/blob/master/categories/multi_media.md)
+
+[碎阅](https://github.com/LRH1993/SuiYue)
+
+[open-source-android-apps](https://github.com/pcqpcq/open-source-android-apps)
+
+[wanandroid](https://github.com/wjwang0914/wj-todo-wanandroid)
+

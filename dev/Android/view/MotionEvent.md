@@ -12,7 +12,7 @@
 
 [android事件拦截处理机制详解](https://www.jianshu.com/p/f93244fbf667)
 
-[]()
+[Android 事件传递机制](https://www.infoq.cn/article/android-event-delivery-mechanism/)
 
 []()
 
