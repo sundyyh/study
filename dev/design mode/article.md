@@ -56,9 +56,15 @@
 
 [访问者模式 Visitor 行为型 设计模式（二十七）](https://www.cnblogs.com/noteless/p/10185359.html)
 
+[《JAVA与模式》之装饰模式](https://www.cnblogs.com/java-my-life/archive/2012/04/20/2455726.html)
+
+[随笔分类 - Android设计模式系列](https://www.cnblogs.com/qianxudetianxia/category/312863.html)
+
+[超全的设计模式简介（45种）](https://juejin.cn/post/6844903822297415687)
+
+[Java 的 23 种设计模式全解析](https://juejin.im/entry/58faca0a1b69e600588cd952)
+
 []()
-
-
 
 
 
