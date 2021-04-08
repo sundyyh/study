@@ -25,3 +25,6 @@
 
 [用的广告栏控件，让你轻松实现广告头效果,支持无限循环](https://github.com/saiwu-bigkoo/Android-ConvenientBanner)
 
+
+
+[Android之ListView异步加载网络图片(优化缓存机制)](https://blog.csdn.net/zircon_1973/article/details/7693839)

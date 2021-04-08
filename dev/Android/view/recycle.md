@@ -33,3 +33,5 @@ https://blog.csdn.net/lly347705530/article/details/78951400
 
 
 [Android智能下拉刷新框架-SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)
+
+[RecyclerView 通用适配 BaseQuickAdapter](https://blog.csdn.net/u011622280/article/details/69229930)
