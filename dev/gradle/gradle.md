@@ -22,3 +22,18 @@
 [Gradle for Android 第六篇( 测试)](https://segmentfault.com/a/1190000004260141)
 
 [Gradle for Android 第七篇( Groovy入门)](https://segmentfault.com/a/1190000004276167)
+
+
+[写给 Android 开发者的 Gradle 系列（一）基本姿势](https://juejin.im/post/5af4f117f265da0b9f405221)
+
+[写给 Android 开发者的 Gradle 系列（二）撰写 task](https://juejin.cn/post/6844903605825191950)
+
+[写给 Android 开发者的 Gradle 系列（三）撰写 plugin](https://juejin.cn/post/6844903608190763015)
+
+
+[寄Android开发Gradle你需要知道的知识](https://juejin.im/post/5aeeb542f265da0b7e0c29f1)
+
+
+[Gradle从入门到实战 - Groovy基础](https://blog.csdn.net/singwhatiwanna/article/details/76084580)
+
+[Gradle 简介](https://www.w3cschool.cn/gradle/6qo51htq.html)

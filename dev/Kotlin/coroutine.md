@@ -34,7 +34,10 @@
 [【译】kotlin 协程官方文档（1）-协程基础（Coroutine Basics）](https://juejin.cn/post/6844903972755472391)
 
 [一文快速入门 Kotlin 协程](https://juejin.cn/post/6908271959381901325)
-[]()
+
+[Kotlin协程Coroutines入门到实战：（一）理解异步回调的本质](https://blog.csdn.net/NJP_NJP/article/details/103513537)
+
+[Kotlin协程Coroutines入门到实战：（二）Coroutines初体验](https://blog.csdn.net/NJP_NJP/article/details/103513719)
 []()
 []()
 []()
