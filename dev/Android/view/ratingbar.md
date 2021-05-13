@@ -1,0 +1,1 @@
+[AndRatingBar](https://codechina.csdn.net/mirrors/giswangsj/AndRatingBar)

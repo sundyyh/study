@@ -37,3 +37,5 @@
 [Gradle从入门到实战 - Groovy基础](https://blog.csdn.net/singwhatiwanna/article/details/76084580)
 
 [Gradle 简介](https://www.w3cschool.cn/gradle/6qo51htq.html)
+
+[7个你应该知道的Gradle实用技巧](https://juejin.cn/post/6947675376835362846)
