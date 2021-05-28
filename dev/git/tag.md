@@ -1,6 +1,6 @@
 1.列出已有的tag
 ```shell
-git tag
+    git tag
 ```
 2.加上-l命令可以使用通配符来过滤tag
 ```shell

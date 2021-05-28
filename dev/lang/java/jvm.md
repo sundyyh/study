@@ -14,9 +14,9 @@
 
 [jvm性能调优(五)-----深入了解性能优化](https://www.cnblogs.com/alimayun/p/12352959.html)
 
-[]()
+[Java内存管理-JVM内存模型以及JDK7和JDK8内存模型对比总结（三）](https://juejin.cn/post/6844903909983535111)
 
-[]()
+[可能是把Java内存区域讲的最清楚的一篇文章](https://juejin.cn/post/6844903663496871943)
 
 []()
 
