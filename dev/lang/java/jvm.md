@@ -18,9 +18,9 @@
 
 [可能是把Java内存区域讲的最清楚的一篇文章](https://juejin.cn/post/6844903663496871943)
 
-[]()
+[再有人问你Java内存模型是什么，就把这篇文章发给他。](https://juejin.cn/post/6844903635181125646)
 
-[]()
+[JVM内存结构 VS Java内存模型 VS Java对象模型](http://www.hollischuang.com/archives/2509)
 
 []()
 
